@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Прогноз погоды</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #a3d4f7, #d1eaff);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1f2d3d;
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        input[type="text"] {
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 25px 0 0 25px;
+            width: 500px;
+        }
+
+        button {
+            background-color: #1d72e8;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 0 25px 25px 0;
+            cursor: pointer;
+        }
+
+        .forecast-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+        }
+
+        .day-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .day-card h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .temp {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+            font-weight: 600;
+            color: #222;
+        }
+
+        .icon {
+            font-size: 1.8rem;
+            margin: 0.5rem 0;
+            color: #ffa500;
+        }
+
+        .error {
+            color: red;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Прогноз погоды</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.city }}
+        <button type="submit">Поиск</button>
+    </form>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% if forecast %}
+    <div class="forecast-grid">
+        {% for day in forecast %}
+        <div class="day-card">
+            <h3>{{ day.weekday }}</h3>
+            <div class="icon">
+                <i class="fas fa-{{ day.icon }}"></i>
+            </div>
+            <p class="temp">{{ day.max }}° / {{ day.min }}°</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+</body>
+</html>
